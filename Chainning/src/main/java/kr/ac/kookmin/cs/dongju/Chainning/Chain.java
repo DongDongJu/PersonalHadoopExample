@@ -138,23 +138,23 @@ public class Chain {
 		job1.setOutputFormatClass(TextOutputFormat.class);
 
 		FileInputFormat.addInputPath(job1, new Path(otherArgs[0]));
-		FileOutputFormat.setOutputPath(job1, new Path("file:///output/"));
+		FileOutputFormat.setOutputPath(job1, new Path("/output/"));
 
 		ControlledJob cJob1 = new ControlledJob(conf);
 		cJob1.setJob(job1);
 
-		Job job2 = new Job(conf, "wordcount1");
+		Job job2 = new Job(conf, "wordcount2");
 
 		job2.setJarByClass(WordCount.class);
-		job2.setMapperClass(TokenizerMapper.class);
+		job2.setMapperClass(TokenizerMapper2.class);
 		job2.setCombinerClass(IntSumCombiner.class);
-		job2.setReducerClass(IntSumReducer.class);
+		job2.setReducerClass(IntSumReducer2.class);
 		job2.setOutputKeyClass(Text.class);
 		job2.setOutputValueClass(IntWritable.class);
 		job2.setInputFormatClass(TextInputFormat.class);
 		job2.setOutputFormatClass(TextOutputFormat.class);
 
-		FileInputFormat.addInputPath(job2, new Path("file:///output/part*"));
+		FileInputFormat.addInputPath(job2, new Path("/output/part*"));
 		FileOutputFormat.setOutputPath(job2, new Path(otherArgs[1]));
 
 		ControlledJob cJob2 = new ControlledJob(conf);
@@ -176,7 +176,7 @@ public class Chain {
 		jobctrl.stop();
 
 		FileSystem fs = new RawLocalFileSystem();
-		fs.delete(new Path("/output4/part*"), true);
+		fs.delete(new Path("/output/part*"), true);
 		fs.close();
 
 	}
